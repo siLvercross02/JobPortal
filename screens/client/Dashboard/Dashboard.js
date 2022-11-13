@@ -5,15 +5,26 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Image,
 } from 'react-native';
-import {Card, Button, Badge, Searchbar} from 'react-native-paper';
+import {Icon} from '@rneui/themed';
+import {Card, Searchbar} from 'react-native-paper';
 import tw from 'twrnc';
+import Jobs from '../../../constants/jobs';
 
 const Dashboard = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [jobQuery, setJobsQuery] = useState(Jobs);
 
-  const onChangeSearch = query => setSearchQuery(query);
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+    const searchJobs = Jobs.filter(item =>
+      item.title.toLowerCase().includes(query.toLowerCase()),
+    );
+
+    setJobsQuery(searchJobs);
+  };
+
+  console.log(searchQuery);
 
   return (
     <ScrollView style={styles.bgDash}>
@@ -88,52 +99,44 @@ const Dashboard = ({navigation}) => {
           <Text style={styles.subDash}>Recommended Jobs For You</Text>
         </View>
         <ScrollView>
-          <TouchableOpacity onPress={() => navigation.navigate('ViewJob')}>
-            <Card style={styles.jobCardStyle}>
-              <Card.Content style={styles.viewCard}>
-                <View style={[tw`ml-4`, styles.detailContainer]}>
-                  <View>
-                    <Text style={styles.listTitle}>Software Engineer</Text>
-                    <Text style={styles.companyText}>Facebook</Text>
-                    <Text style={styles.subText}>Philippines</Text>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </TouchableOpacity>
-          <Card style={styles.jobCardStyle}>
-            <Card.Content style={styles.viewCard}>
-              <View style={[tw`ml-4`, styles.detailContainer]}>
-                <View>
-                  <Text style={styles.listTitle}>Software Engineer</Text>
-                  <Text style={styles.companyText}>Facebook</Text>
-                  <Text style={styles.subText}>Philippines</Text>
-                </View>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.jobCardStyle}>
-            <Card.Content style={styles.viewCard}>
-              <View style={[tw`ml-4`, styles.detailContainer]}>
-                <View>
-                  <Text style={styles.listTitle}>Software Engineer</Text>
-                  <Text style={styles.companyText}>Facebook</Text>
-                  <Text style={styles.subText}>Philippines</Text>
-                </View>
-              </View>
-            </Card.Content>
-          </Card>
-          <Card style={styles.jobCardStyle}>
-            <Card.Content style={styles.viewCard}>
-              <View style={[tw`ml-4`, styles.detailContainer]}>
-                <View>
-                  <Text style={styles.listTitle}>Software Engineer</Text>
-                  <Text style={styles.companyText}>Facebook</Text>
-                  <Text style={styles.subText}>Philippines</Text>
-                </View>
-              </View>
-            </Card.Content>
-          </Card>
+          {jobQuery.map((item, index) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('HomeTabs', {
+                    screen: 'Dashboard',
+                    params: {
+                      screen: 'Home',
+                      params: {
+                        screen: 'ViewJobScreen',
+                        params: {
+                          items: item,
+                        },
+                      },
+                    },
+                  });
+                }}
+                key={index}>
+                <Card style={styles.jobCardStyle}>
+                  <Card.Content style={styles.viewCard}>
+                    <Icon
+                      name="work"
+                      type="material"
+                      color="#0052e1"
+                      size={30}
+                    />
+                    <View style={[tw`ml-4`, styles.detailContainer]}>
+                      <View>
+                        <Text style={styles.listTitle}>{item.title}</Text>
+                        <Text style={styles.companyText}>{item.company}</Text>
+                        <Text style={styles.subText}>{item.location}</Text>
+                      </View>
+                    </View>
+                  </Card.Content>
+                </Card>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
     </ScrollView>
@@ -170,6 +173,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
     fontWeight: '700',
+  },
+  viewCard: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   cardStyle: {
     borderColor: '#002FD6',

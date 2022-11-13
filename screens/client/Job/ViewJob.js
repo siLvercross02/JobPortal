@@ -1,19 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {Icon} from '@rneui/themed';
 import {Card, Button} from 'react-native-paper';
 import tw from 'twrnc';
 
-const ViewJob = ({navigation}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const onChangeSearch = query => setSearchQuery(query);
+const ViewJob = ({route, navigation}) => {
+  const {title, company, location, description} = route.params.items;
+  const regexForStripHTML = description.replace(/\s|\n|&nbsp;/g, ' ');
+  const finalDesc = regexForStripHTML.replace(/<[^>]+>/gm, '');
 
   return (
     <ScrollView style={styles.bgDash}>
@@ -21,13 +15,15 @@ const ViewJob = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            marginTop: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Text style={styles.titleDash}>Software Engineer</Text>
-          <Text style={styles.textDash}>Philippines</Text>
+          <Icon name="work" type="material" color="#0052e1" size={30} />
+          <View style={[tw`ml-4 mt-4`]}>
+            <Text style={styles.titleDash}>{title}</Text>
+            <Text style={styles.textDash}>{company}</Text>
+            <Text style={styles.textDash}>{location}</Text>
+          </View>
         </View>
 
         <View style={styles.descWrapper}>
@@ -58,20 +54,14 @@ const ViewJob = ({navigation}) => {
         </View>
 
         <View style={[tw`mt-2 mb-2`]}>
-          <Text style={styles.subDash}>Responsibilities</Text>
+          <Text style={styles.subDash}>Qualification & Responsibilities</Text>
         </View>
 
         <View style={[tw`mt-2 mb-2`]}>
-          <Text style={styles.requireText}>
-            Collaborate with web designers and back-end designers to complete
-            projects Create wireframes and mockups of site/application designs
-            Turn feedback into custom solutions for client needs Optimize
-            apps/sites to improve performance and efficiency Author technical
-            documentation
-          </Text>
+          <Text style={styles.requireText}>{finalDesc}</Text>
         </View>
 
-        <View style={[tw`mt-2 mb-2`]}>
+        {/* <View style={[tw`mt-2 mb-2`]}>
           <Text style={styles.subDash}>Minimum Qualifications</Text>
         </View>
 
@@ -91,14 +81,27 @@ const ViewJob = ({navigation}) => {
             Exposure to a formal working environment with experience in any of
             the following: ReactJS, VueJS, JavaScript, HTML/CSS
           </Text>
-        </View>
+        </View> */}
 
         <View style={[tw`mb-6`, styles.viewBtn]}>
           <Button
             style={styles.btnReg}
             mode="contained"
             onPress={() => {
-              navigation.navigate('HomeTabs');
+              navigation.navigate('HomeTabs', {
+                screen: 'Dashboard',
+                params: {
+                  screen: 'Home',
+                  params: {
+                    screen: 'ApplyJobScreen',
+                    params: {
+                      title: title,
+                      location: location,
+                      company: company,
+                    },
+                  },
+                },
+              });
             }}
             labelStyle={{
               fontFamily: 'Karla-Medium',

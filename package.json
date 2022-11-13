@@ -5,7 +5,7 @@
   "scripts": {
     "cc": "rimraf node_modules/.cache/babel-loader/*,",
     "reset": "rimraf -rf ${TMPDIR:-/tmp}/metro-*",
-    "android": "npm run cc && react-native run-android",
+    "android": "npm run cc --reset-cache && react-native run-android ",
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
     "test": "jest",
@@ -22,6 +22,7 @@
     "@rneui/themed": "^4.0.0-rc.7",
     "react": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-document-picker": "^8.1.2",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-linear-gradient": "^2.5.6",
