@@ -103,7 +103,7 @@ const Dashboard = ({navigation}) => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('HomeTabs', {
+                  navigation.push('HomeTabs', {
                     screen: 'Dashboard',
                     params: {
                       screen: 'Home',

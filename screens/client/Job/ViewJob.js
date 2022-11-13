@@ -88,7 +88,7 @@ const ViewJob = ({route, navigation}) => {
             style={styles.btnReg}
             mode="contained"
             onPress={() => {
-              navigation.navigate('HomeTabs', {
+              navigation.push('HomeTabs', {
                 screen: 'Dashboard',
                 params: {
                   screen: 'Home',

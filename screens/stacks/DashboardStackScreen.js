@@ -60,12 +60,12 @@ export const DashboardStackScreen = ({navigation}) => (
         headerBackground: () => <Gradient />,
         headerLeft: () => (
           <Icon
-            name="menu"
+            name="arrow-back"
             type="material"
             size={25}
             color="#fff"
             iconStyle={tw`ml-4`}
-            onPress={() => navigation.toggleDrawer()}
+            onPress={() => navigation.goBack()}
           />
         ),
       }}
@@ -89,12 +89,12 @@ export const DashboardStackScreen = ({navigation}) => (
         headerBackground: () => <Gradient />,
         headerLeft: () => (
           <Icon
-            name="menu"
+            name="arrow-back"
             type="material"
             size={25}
             color="#fff"
             iconStyle={tw`ml-4`}
-            onPress={() => navigation.toggleDrawer()}
+            onPress={() => navigation.goBack()}
           />
         ),
       }}
@@ -118,12 +118,12 @@ export const DashboardStackScreen = ({navigation}) => (
         headerBackground: () => <Gradient />,
         headerLeft: () => (
           <Icon
-            name="menu"
+            name="arrow-back"
             type="material"
             size={25}
             color="#fff"
             iconStyle={tw`ml-4`}
-            onPress={() => navigation.toggleDrawer()}
+            onPress={() => navigation.goBack()}
           />
         ),
       }}
