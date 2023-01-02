@@ -7,13 +7,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from '@rneui/themed';
-import {Card, Searchbar} from 'react-native-paper';
+import {Card, Searchbar, DataTable} from 'react-native-paper';
 import tw from 'twrnc';
 import Jobs from '../../../constants/jobs';
+import users from '../../../constants/users';
+import courses from '../../../constants/courses';
+
+const optionsPerPage = [2, 3, 4];
 
 const Dashboard = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [jobQuery, setJobsQuery] = useState(Jobs);
+  const [listItem, setListItem] = useState([]);
+  const [page, setPage] = useState(0);
+  const [items, setItems] = useState(10);
+  const [usersList, setUsersList] = useState([]);
+
+  console.log(usersList);
 
   const onChangeSearch = query => {
     setSearchQuery(query);
@@ -24,7 +34,80 @@ const Dashboard = ({navigation}) => {
     setJobsQuery(searchJobs);
   };
 
-  console.log(searchQuery);
+  useEffect(() => {
+    let list = [];
+
+    const finaArray = () => {
+      users.forEach(data => {
+        courses.forEach(item => {
+          if (item.user_id === data.id) {
+            list.push({
+              id: item.user_id,
+              userId: item.id,
+              name: data.name,
+              phone: data.phone,
+              email: data.phone,
+              course_name: item.course_name,
+              course_selection: item.course_selection,
+              semester: item.semester,
+            });
+
+            setListItem(list);
+          }
+        });
+      });
+    };
+
+    finaArray();
+  }, [users, courses]);
+
+  useEffect(() => {
+    fetch(
+      'https://gist.githubusercontent.com/JCGonzaga01/9c9e3590fb23274263678b6c4bcf9963/raw/600c8281f9db7eaba959a732912eba350bf7387d/user-course-selection.json',
+    )
+      .then(res => res.json())
+      .then(json => setUsersList(json));
+  }, [usersList]);
+
+  // useEffect(() => {
+  //   const newArray = () => {
+  //     const output = Object.values(
+  //       listItem.reduce((acc, cur) => {
+  //         console.log('acc', acc);
+  //         acc[cur.id] = acc[cur.id] || {
+  //           id: cur.user_id,
+  //           name: cur.name,
+  //           phone: cur.phone,
+  //           course: [],
+  //         };
+  //         acc[cur.user_id].course.push({
+  //           course_name: cur.course_name,
+  //           course_selection: cur.course_selection,
+  //           semester: cur.semester,
+  //         });
+  //         return acc;
+  //       }, {}),
+  //     );
+
+  //     console.log('outpult', output);
+  //   };
+
+  //   newArray();
+  // }, [users, courses]);
+
+  // useEffect(() => {
+  //   const result = listItem.reduce(
+  //     (a, o) => ({
+  //       ...a,
+  //       ...{
+  //         [o.id]: {...o},
+  //       },
+  //     }),
+  //     {},
+  //   );
+
+  //   console.log('result', result);
+  // }, [listItem]);
 
   return (
     <ScrollView style={styles.bgDash}>
@@ -98,7 +181,7 @@ const Dashboard = ({navigation}) => {
         <View style={[tw`mt-2 mb-2`]}>
           <Text style={styles.subDash}>Recommended Jobs For You</Text>
         </View>
-        <ScrollView>
+        {/* <ScrollView>
           {jobQuery.map((item, index) => {
             return (
               <TouchableOpacity
@@ -137,7 +220,58 @@ const Dashboard = ({navigation}) => {
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
+        </ScrollView> */}
+
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Name</DataTable.Title>
+            <DataTable.Title>Phone</DataTable.Title>
+            <DataTable.Title>Email</DataTable.Title>
+            <DataTable.Title>Course Name</DataTable.Title>
+            <DataTable.Title>Course Selection</DataTable.Title>
+            <DataTable.Title>Semester</DataTable.Title>
+          </DataTable.Header>
+
+          {/* {listItem.map((item, index) => {
+            let source = [];
+
+            return (
+              <DataTable.Row key={index}>
+                <DataTable.Cell>{item.name}</DataTable.Cell>
+                <DataTable.Cell>{item.phone}</DataTable.Cell>
+                <DataTable.Cell>{item.email}</DataTable.Cell>
+                <DataTable.Cell>{item.course_name}</DataTable.Cell>
+                <DataTable.Cell>{item.course_selection}</DataTable.Cell>
+                <DataTable.Cell>{item.semester}</DataTable.Cell>
+              </DataTable.Row>
+            );
+          })} */}
+
+          {listItem.map((item, index) => {
+            return (
+              <DataTable.Row key={index}>
+                <DataTable.Cell>{item.name}</DataTable.Cell>
+                <DataTable.Cell>{item.phone}</DataTable.Cell>
+                <DataTable.Cell>{item.email}</DataTable.Cell>
+                <DataTable.Cell>{item.course_name}</DataTable.Cell>
+                <DataTable.Cell>{item.course_selection}</DataTable.Cell>
+                <DataTable.Cell>{item.semester}</DataTable.Cell>
+              </DataTable.Row>
+            );
+          })}
+
+          {/* <DataTable.Pagination
+            page={page}
+            numberOfPages={3}
+            onPageChange={page => setPage(page)}
+            label="1-2 of 6"
+            optionsPerPage={optionsPerPage}
+            itemsPerPage={items}
+            setItemsPerPage={setItems}
+            showFastPagination
+            optionsLabel={'Rows per page'}
+          /> */}
+        </DataTable>
       </View>
     </ScrollView>
   );
